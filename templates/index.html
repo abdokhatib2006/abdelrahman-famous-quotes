@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quoteverse — 100 Famous & Timeless Quotes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Navbar / Header -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-icon">
+          <span>“</span>
+        </div>
+        <div class="brand-text">
+          <h1>Quoteverse</h1>
+          <span class="badge" id="total-badge">100 Curated Quotes</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark / Light Theme" title="Toggle Theme">
+          <svg id="theme-icon-sun" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="theme-icon-moon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Search & Filters Container -->
+      <section class="controls-card">
+        <div class="search-row">
+          <div class="search-box">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" placeholder="Search by words or author..." autocomplete="off">
+            <button id="clear-search-btn" class="clear-btn hidden" aria-label="Clear Search">&times;</button>
+          </div>
+
+          <div class="author-select-wrapper">
+            <select id="author-select" aria-label="Filter by Author">
+              <option value="">All Authors</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Categories Pill Bar -->
+        <div class="categories-bar-wrapper">
+          <span class="filter-label">Categories:</span>
+          <div class="categories-pills" id="categories-container">
+            <button class="pill active" data-category="all">
+              All <span class="pill-count">100</span>
+            </button>
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Hero Random Quote Card -->
+      <section class="hero-section">
+        <div class="quote-card" id="quote-card">
+          <div class="card-quote-mark" aria-hidden="true">“</div>
+          
+          <div class="quote-content-wrapper">
+            <div class="quote-category-tag" id="quote-category">Inspiration</div>
+            <blockquote id="quote-text" class="quote-text">
+              Loading an inspiring quote...
+            </blockquote>
+            <cite id="quote-author" class="quote-author">—</cite>
+          </div>
+
+          <!-- Actions Bar -->
+          <div class="quote-actions">
+            <button id="random-btn" class="primary-btn" title="Get another quote (Shortcut: Space)">
+              <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
+              </svg>
+              <span>Random Quote</span>
+              <kbd class="kbd-hint">Space</kbd>
+            </button>
+
+            <div class="action-buttons-group">
+              <button id="copy-btn" class="action-btn" title="Copy quote to clipboard">
+                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+
+              <a id="tweet-btn" class="action-btn" target="_blank" rel="noopener noreferrer" title="Share on X / Twitter">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                <span>Share</span>
+              </a>
+
+              <button id="toggle-explorer-btn" class="action-btn" title="View matching quotes collection">
+                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span id="explorer-toggle-text">Show All (<span id="matching-count">100</span>)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- All Matching Quotes Explorer / Gallery (collapsible) -->
+      <section id="explorer-section" class="explorer-section hidden">
+        <div class="explorer-header">
+          <h2 id="explorer-title">Matching Quotes</h2>
+          <span class="explorer-subtitle" id="explorer-count-badge">100 quotes found</span>
+        </div>
+        <div class="quotes-grid" id="quotes-grid">
+          <!-- Quote cards injected dynamically -->
+        </div>
+        <div id="no-quotes-message" class="no-quotes hidden">
+          <p>No quotes found matching your current search or filters.</p>
+          <button id="reset-filters-btn" class="secondary-btn">Reset Filters</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden" role="status" aria-live="polite">
+      <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toast-message">Quote copied to clipboard!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Curated 100 quotes from history's deepest thinkers, writers, scientists, and leaders.</p>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
